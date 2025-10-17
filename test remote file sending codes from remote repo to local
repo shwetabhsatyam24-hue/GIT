@@ -1,113 +1,152 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The History of Git — A Short Story</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg1: #0f172a;
-      --bg2: #071024;
-      --card: rgba(255,255,255,0.03);
-      --accent: #6ee7b7;
-      --muted: #94a3b8;
-      --glass: rgba(255,255,255,0.04);
-    }
-    *{box-sizing:border-box}
-    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; margin:0; background:linear-gradient(160deg,var(--bg1),var(--bg2)); color:#e6eef8; -webkit-font-smoothing:antialiased; line-height:1.5}
-    .container{max-width:980px;margin:48px auto;padding:24px}
-    header{display:flex;align-items:center;gap:16px}
-    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,#0ea5a4,#7c3aed);display:grid;place-items:center;font-weight:800;color:white;font-size:20px;box-shadow:0 6px 18px rgba(0,0,0,0.5)}
-    h1{margin:0;font-size:28px}
-    p.lead{color:var(--muted);margin-top:8px}
+import React, { useEffect, useRef } from "react";
+import anime from "animejs";
 
-    .hero{margin-top:20px;padding:20px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);box-shadow:0 8px 30px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
-    .flex{display:flex;gap:20px}
-    .col{flex:1}
+export default function GitHistoryAnimated() {
+  const logoRef = useRef(null);
+  const timelineRef = useRef(null);
 
-    .timeline{margin-top:18px;display:grid;gap:12px}
-    .event{padding:16px;border-radius:12px;background:var(--card);border:1px solid rgba(255,255,255,0.02);position:relative;overflow:hidden}
-    .event::before{content:'';position:absolute;left:0;top:0;height:100%;width:6px;background:linear-gradient(180deg,var(--accent),transparent);border-radius:6px 0 0 6px}
-    .event h3{margin:0 0 6px 12px;font-size:16px}
-    .meta{color:var(--muted);font-size:13px;margin-left:12px}
+  useEffect(() => {
+    // Logo pulse and rotate
+    anime({
+      targets: logoRef.current,
+      scale: [0.9, 1.05],
+      rotate: ["-6deg", "6deg"],
+      easing: "easeInOutSine",
+      duration: 1200,
+      direction: "alternate",
+      loop: true,
+    });
 
-    footer{margin-top:28px;color:var(--muted);font-size:13px;text-align:center}
+    // Staggered timeline reveal
+    anime({
+      targets: timelineRef.current.querySelectorAll(".event"),
+      translateY: [20, 0],
+      opacity: [0, 1],
+      delay: anime.stagger(180),
+      easing: "spring(1, 80, 10, 0)",
+      duration: 800,
+    });
 
-    /* Responsive */
-    @media (max-width:720px){.flex{flex-direction:column}.logo{width:56px;height:56px}}
-  </style>
-</head>
-<body>
-  <main class="container" role="main">
-    <header>
-      <div class="logo">GIT</div>
-      <div>
-        <h1>The History of Git</h1>
-        <p class="lead">A concise 500-word narrative about how Git started, why it mattered, and how it grew into the backbone of modern software development.</p>
-      </div>
-    </header>
+    // Small floating circles background
+    anime({
+      targets: ".float",
+      translateY: [0, -18],
+      opacity: [0.6, 0.12],
+      loop: true,
+      direction: "alternate",
+      easing: "easeInOutSine",
+      delay: anime.stagger(120, { start: 200 }),
+      duration: 2400,
+    });
+  }, []);
 
-    <section class="hero" aria-labelledby="intro">
-      <div class="flex">
-        <div class="col">
-          <article id="intro">
-            <p style="margin:0;color:#dff7ea;">In 2005, when the Linux kernel community needed a fast, distributed version control system they could trust, Linus Torvalds created Git. The immediate trigger was the kernel project's fallout with a proprietary system they had briefly adopted. Torvalds designed Git to be small, fast, and to support non-linear workflows at massive scale — emphasizing integrity, performance, and a model that treats every developer as a potential maintainer.</p>
-            <p style="margin-top:12px;color:var(--muted)">Git’s name was chosen with a wink — "git" being British slang for an unpleasant person — but its design was deliberate. Several core ideas defined Git: snapshots instead of changesets, content-addressable storage using SHA-1 (later migrated to stronger hashes), local commits enabling offline work, and cheap branching and merging that encouraged experimentation. These ideas made workflows like feature-branching and pull requests practical.</p>
-          </article>
+  const historyText = `In early 2005 the Linux kernel project faced a painful choice after proprietary source-control tooling strained community workflows and licensing. Linus Torvalds — already known for creating the Linux kernel — set out to build a new tool tailored to the kernel’s needs: fast performance on large trees, strong integrity guarantees, and a distributed model that encouraged many contributors to work offline and merge often.
+
+Git’s initial design emphasized snapshots rather than incremental patches, storing content in a content-addressed object database (originally using SHA-1). This approach made it cheap to branch and merge because branches were simply lightweight references to commits instead of heavy, centralised constructs. Local commits enabled developers to work without network access, while later syncing operations exchanged only objects that the remote didn’t already have, making collaboration efficient.
+
+Adoption spread quickly among open-source projects because Git solved real pain points: it was fast, reliable, and supported non-linear development at scale. Its early days included intense iteration on commands and workflows, with contributors building tooling, GUIs, and documentation to improve usability.
+
+A pivotal moment arrived in 2008 when GitHub combined Git with a web-based social layer: pull requests, forking, and inline code review. That social model made collaboration intuitive, lowered entry barriers, and accelerated the formation of a massive ecosystem of public and private repositories.
+
+Throughout the 2010s, Git matured into an enterprise-grade platform. Hosting providers, continuous integration systems, and project-management integrations turned Git into the backbone of modern DevOps. Companies introduced managed services, permissions models, and large-scale mirrors to support enterprise requirements.
+
+In recent years, Git has continued to evolve: the community has addressed security concerns around SHA-1 by migrating toward stronger hashing, performance improvements for very large repos have been prioritized, and richer tooling has made workflows more discoverable. Today Git is not just a version control system; it’s an ecosystem that enables distributed collaboration, transparent history, and reproducible development — the foundation of how most software is built worldwide.`;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-100 p-6">
+      <div className="max-w-5xl mx-auto">
+        <header className="flex items-center gap-4 mb-6">
+          <div
+            ref={logoRef}
+            className="w-20 h-20 rounded-2xl flex items-center justify-center text-2xl font-extrabold bg-gradient-to-tr from-indigo-600 to-teal-400 shadow-2xl"
+            aria-hidden
+          >
+            GIT
+          </div>
+          <div>
+            <h1 className="text-3xl font-semibold">The History of Git — Animated</h1>
+            <p className="text-slate-400 mt-1">An interactive, animated retelling of how Git changed software collaboration.</p>
+          </div>
+        </header>
+
+        {/* Floating decorative bubbles */}
+        <div aria-hidden className="relative mb-4">
+          <div className="absolute -left-6 -top-10 w-32 h-32 rounded-full bg-white/6 blur-xl float" />
+          <div className="absolute right-0 -top-6 w-24 h-24 rounded-full bg-cyan-400/6 blur-xl float" />
+          <div className="absolute left-36 top-4 w-16 h-16 rounded-full bg-indigo-500/6 blur-xl float" />
         </div>
-        <div class="col" aria-hidden="true">
-          <svg width="100%" height="100%" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid meet" style="max-height:180px">
-            <defs>
-              <linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#7c3aed"/><stop offset="1" stop-color="#06b6d4"/></linearGradient>
-            </defs>
-            <rect x="0" y="0" width="300" height="200" rx="12" fill="url(#g)" opacity="0.12"></rect>
-            <g transform="translate(24,36) scale(1)">
-              <circle cx="16" cy="24" r="8" fill="#fff" opacity="0.9"></circle>
-              <circle cx="72" cy="24" r="8" fill="#fff" opacity="0.9"></circle>
-              <circle cx="128" cy="24" r="8" fill="#fff" opacity="0.9"></circle>
-              <rect x="8" y="72" width="160" height="56" rx="8" fill="#fff" opacity="0.06"></rect>
-            </g>
-          </svg>
-        </div>
-      </div>
-    </section>
 
-    <section class="timeline" aria-label="timeline">
-      <div class="event">
-        <h3>2005 — Birth of Git</h3>
-        <div class="meta">Linus Torvalds, created to replace BitKeeper after licensing disputes.</div>
-        <p style="margin-top:8px;color:var(--muted)">Torvalds released the first Git in April 2005. The initial goals were simplicity, speed, and robust support for distributed workflows. Early development focused on kernel workflows: high-volume branching, rebasing, and merging across many contributors.</p>
-      </div>
+        <main className="grid md:grid-cols-3 gap-6 items-start">
+          <section className="md:col-span-2 bg-slate-800/40 p-6 rounded-2xl backdrop-blur-sm border border-white/6 shadow-xl">
+            <article>
+              <p className="text-slate-200 leading-relaxed" style={{ textAlign: "justify" }}>
+                {historyText}
+              </p>
+            </article>
 
-      <div class="event">
-        <h3>2005–2007 — Growth and Community</h3>
-        <div class="meta">Rapid adoption by open-source projects.</div>
-        <p style="margin-top:8px;color:var(--muted)">Developers and projects quickly embraced Git because it solved real pain points. Tools and hosting services began to appear, and the community improved documentation, GUIs, and integrations that lowered the learning curve.</p>
-      </div>
+            <div className="mt-6" ref={timelineRef}>
+              <div className="space-y-4">
+                <div className="event p-4 rounded-lg bg-gradient-to-r from-white/3 to-transparent border border-white/6">
+                  <h3 className="text-lg font-semibold">2005 — Birth of Git</h3>
+                  <p className="text-sm text-slate-400 mt-1">Created by Linus Torvalds as a fast, distributed VCS after licensing issues with previous tooling.</p>
+                </div>
 
-      <div class="event">
-        <h3>2008 — GitHub and Social Collaboration</h3>
-        <div class="meta">Git meets the web.</div>
-        <p style="margin-top:8px;color:var(--muted)">GitHub launched in 2008, combining Git with social features like pull requests, forking, and web-based reviews. This catalyzed collaboration patterns that are now industry standards and made Git accessible to millions.</p>
-      </div>
+                <div className="event p-4 rounded-lg bg-gradient-to-r from-white/3 to-transparent border border-white/6">
+                  <h3 className="text-lg font-semibold">2005–2007 — Community Growth</h3>
+                  <p className="text-sm text-slate-400 mt-1">Rapid adoption by open-source projects and tooling improvements lowered the learning curve.</p>
+                </div>
 
-      <div class="event">
-        <h3>2010s — Maturation and Ecosystem</h3>
-        <div class="meta">Tooling, GUIs, and enterprise adoption.</div>
-        <p style="margin-top:8px;color:var(--muted)">Throughout the 2010s, Git’s ecosystem matured: graphical tools, continuous integration, and enterprise hosting became common. Platforms like GitLab, Bitbucket, and managed services broadened adoption in corporate settings.</p>
-      </div>
+                <div className="event p-4 rounded-lg bg-gradient-to-r from-white/3 to-transparent border border-white/6">
+                  <h3 className="text-lg font-semibold">2008 — GitHub & Social Workflows</h3>
+                  <p className="text-sm text-slate-400 mt-1">GitHub introduced pull requests and forking, making distributed collaboration mainstream.</p>
+                </div>
 
-      <div class="event">
-        <h3>Recent Years — Security and Scale</h3>
-        <div class="meta">Hash upgrades and wider use.</div>
-        <p style="margin-top:8px;color:var(--muted)">Git has evolved to address security and scale, moving away from SHA-1 toward stronger hashing and improving performance for very large repositories. It remains the foundation of modern software development workflows worldwide.</p>
-      </div>
-    </section>
+                <div className="event p-4 rounded-lg bg-gradient-to-r from-white/3 to-transparent border border-white/6">
+                  <h3 className="text-lg font-semibold">2010s — Maturation</h3>
+                  <p className="text-sm text-slate-400 mt-1">Enterprise hosting, CI/CD, and GUI tools made Git central to modern development.</p>
+                </div>
 
-    <footer>
-      <div>Made with ♥ — concise history of Git. Want a printable version, dark/light toggle, or a timeline animation? Tell me which and I’ll update the page.</div>
-    </footer>
-  </main>
-</body>
-</html>
+                <div className="event p-4 rounded-lg bg-gradient-to-r from-white/3 to-transparent border border-white/6">
+                  <h3 className="text-lg font-semibold">Today — Scale & Security</h3>
+                  <p className="text-sm text-slate-400 mt-1">Ongoing improvements around hashing, performance, and usability keep Git relevant at scale.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <aside className="hidden md:block p-4 rounded-2xl bg-slate-800/30 border border-white/4 shadow-inner">
+            <h4 className="font-semibold">Quick Facts</h4>
+            <ul className="mt-3 text-sm text-slate-300 space-y-2">
+              <li>Created: April 2005</li>
+              <li>Creator: Linus Torvalds</li>
+              <li>First big web host: GitHub (2008)</li>
+              <li>Model: Distributed, snapshot-based</li>
+            </ul>
+
+            <div className="mt-4">
+              <button
+                onClick={() => {
+                  // small interactive burst
+                  anime({
+                    targets: ".event",
+                    scale: [1, 1.02, 1],
+                    duration: 600,
+                    easing: "easeOutBack",
+                    delay: anime.stagger(80),
+                  });
+                }}
+                className="px-3 py-2 rounded-md bg-emerald-500/90 text-black font-medium"
+              >
+                Animate Timeline
+              </button>
+            </div>
+          </aside>
+        </main>
+
+        <footer className="text-center text-slate-400 mt-8">
+          <small>Made with ❤️ • Animated with anime.js • Built as a React component</small>
+        </footer>
+      </div>
+    </div>
+  );
+}
