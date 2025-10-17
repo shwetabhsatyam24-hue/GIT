@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Git Demo - Version 4</title>
+    <title>Git Demo - Version 5</title>
 
     <style>
         body {
             background: linear-gradient(to right, #74ebd5, #ACB6E5);
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #333;
             margin: 0;
             padding: 20px;
             text-align: center;
+            transition: background 1s ease-in-out;
         }
 
         h1 {
@@ -35,7 +36,7 @@
         }
 
         ul li {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.8);
             margin: 8px auto;
             padding: 10px;
             width: 60%;
@@ -48,26 +49,78 @@
             font-size: 0.9em;
             color: #555;
         }
+
+        button {
+            background-color: #4e73df;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 25px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2e59d9;
+            transform: scale(1.05);
+        }
+
+        .quote {
+            margin-top: 60px;
+            font-style: italic;
+            font-size: 1.2em;
+            color: #333;
+            animation: fadeIn 2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
 
     <h1>Hello, World!</h1>
-    <p>This is a sample HTML document, now updated for <strong>Git version 4</strong>.</p>
+    <p>This is a sample HTML document, now updated for <strong>Git version 5</strong>.</p>
 
     <h2>About This Page</h2>
-    <p>This page is part of my Git learning journey. I’m practicing commits and version control.</p>
+    <p>This page is part of my Git learning journey. I’m practicing commits, CSS, and JavaScript.</p>
 
     <ul>
         <li>Version 1: Created the basic HTML file</li>
         <li>Version 2: Added a paragraph</li>
         <li>Version 3: Added a list and footer</li>
-        <li><strong>Version 4:</strong> Added background color and CSS styling</li>
+        <li>Version 4: Added background color and CSS styling</li>
+        <li><strong>Version 5:</strong> Added interactivity and a quote section</li>
     </ul>
+
+    <button onclick="changeBackground()">Change Background Color 🎨</button>
+
+    <div class="quote">
+        <p>“The best way to learn Git is to <strong>commit</strong> to it every day.” 💡</p>
+    </div>
 
     <footer>
         <p>Created by Shwetabh — Learning Git & GitHub 🚀</p>
     </footer>
+
+    <script>
+        function changeBackground() {
+            const colors = [
+                'linear-gradient(to right, #ff9a9e, #fad0c4)',
+                'linear-gradient(to right, #a1c4fd, #c2e9fb)',
+                'linear-gradient(to right, #fbc2eb, #a6c1ee)',
+                'linear-gradient(to right, #fddb92, #d1fdff)',
+                'linear-gradient(to right, #84fab0, #8fd3f4)'
+            ];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            document.body.style.background = randomColor;
+        }
+    </script>
 
 </body>
 </html>
